@@ -22,6 +22,12 @@
   box-sizing: border-box;
 }
 
+/* L'attributo [hidden] deve sempre vincere, anche sugli elementi con display:flex
+   impostato da una classe con la stessa specificità (es. .overlay, .pannello). */
+[hidden] {
+  display: none !important;
+}
+
 html, body {
   height: 100%;
   margin: 0;

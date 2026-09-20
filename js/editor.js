@@ -170,13 +170,27 @@ export function creaEditor({ container, onParolaToccata, onSalvato }) {
     pianificaRicalcoloGutter();
   }
 
+  // Aggiunge uno spazio prima/dopo un inserimento "a blocco" (rima cercata a mano,
+  // frase dalla Tasca) solo se altrimenti si incollerebbe a una lettera adiacente:
+  // non è una correzione del testo digitato dall'utente, ma una cucitura tra due
+  // frammenti indipendenti inseriti con un tocco.
   function inserisciTesto(frammento) {
     const inizio = textarea.selectionStart;
     const fine = textarea.selectionEnd;
     const valore = textarea.value;
-    const nuovoValore = valore.slice(0, inizio) + frammento + valore.slice(fine);
+    const isLettera = (ch) => ch && /[a-zàèéìíòóùú0-9]/i.test(ch);
+
+    let daInserire = frammento;
+    if (isLettera(valore[inizio - 1]) && isLettera(daInserire[0])) {
+      daInserire = " " + daInserire;
+    }
+    if (isLettera(valore[fine]) && isLettera(daInserire[daInserire.length - 1])) {
+      daInserire = daInserire + " ";
+    }
+
+    const nuovoValore = valore.slice(0, inizio) + daInserire + valore.slice(fine);
     textarea.value = nuovoValore;
-    const nuovaPosizione = inizio + frammento.length;
+    const nuovaPosizione = inizio + daInserire.length;
     textarea.setSelectionRange(nuovaPosizione, nuovaPosizione);
     textarea.focus();
     pianificaRicalcoloGutter();
@@ -185,7 +199,8 @@ export function creaEditor({ container, onParolaToccata, onSalvato }) {
 
   function sostituisciParolaCorrente(nuovaParola) {
     // Sostituisce la parola sotto/prima del cursore (usata quando si tocca una rima
-    // dopo aver toccato una parola nel testo).
+    // dopo aver toccato una parola nel testo). Mantiene l'iniziale maiuscola se la
+    // parola originale la aveva (es. inizio verso).
     const pos = textarea.selectionStart;
     const valore = textarea.value;
     let inizio = pos;
@@ -193,9 +208,16 @@ export function creaEditor({ container, onParolaToccata, onSalvato }) {
     const isLettera = (ch) => ch && /[a-zàèéìíòóùú]/i.test(ch);
     while (inizio > 0 && isLettera(valore[inizio - 1])) inizio--;
     while (fine < valore.length && isLettera(valore[fine])) fine++;
-    const nuovoValore = valore.slice(0, inizio) + nuovaParola + valore.slice(fine);
+
+    const parolaOriginale = valore.slice(inizio, fine);
+    let parolaFinale = nuovaParola;
+    if (parolaOriginale && parolaOriginale[0] === parolaOriginale[0].toUpperCase() && /[a-zàèéìíòóùú]/i.test(parolaOriginale[0])) {
+      parolaFinale = parolaFinale[0].toUpperCase() + parolaFinale.slice(1);
+    }
+
+    const nuovoValore = valore.slice(0, inizio) + parolaFinale + valore.slice(fine);
     textarea.value = nuovoValore;
-    const nuovaPosizione = inizio + nuovaParola.length;
+    const nuovaPosizione = inizio + parolaFinale.length;
     textarea.setSelectionRange(nuovaPosizione, nuovaPosizione);
     textarea.focus();
     pianificaRicalcoloGutter();
