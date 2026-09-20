@@ -1,0 +1,39 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>
+  html,body{margin:0;padding:0;width:100vw;height:100vh;overflow:hidden;background:#0b0b0d;}
+  .scena{position:relative;width:100vw;height:100vh;}
+  .bg{position:absolute;inset:0;background:radial-gradient(circle at 35% 30%, #1c1c20 0%, #0b0b0d 70%);}
+  .blocco{
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%,-52%);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .lettera{
+    font-family:Arial, "Liberation Sans", sans-serif;
+    font-weight:900;
+    font-size:56vw;
+    line-height:0.82;
+    color:#e8ff2e;
+    transform:scaleX(0.78);
+    text-shadow: 0 0 6vw rgba(232,255,46,0.35);
+  }
+  .barra{
+    margin-top:5vw;
+    width:46vw;
+    height:4vw;
+    background:#e8ff2e;
+    border-radius:2vw;
+  }
+</style></head>
+<body>
+  <div class="scena">
+    <div class="bg"></div>
+    <div class="blocco">
+      <div class="lettera">B</div>
+      <div class="barra"></div>
+    </div>
+  </div>
+</body></html>

@@ -1,0 +1,20 @@
+{
+  "name": "Il Bazar — quaderno di rime",
+  "short_name": "Il Bazar",
+  "description": "Quaderno per scrivere poesie e testi rap, con rimario italiano offline. Nessun account, tutto resta sul telefono.",
+  "id": "/",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b0b0d",
+  "theme_color": "#0b0b0d",
+  "lang": "it",
+  "dir": "ltr",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
