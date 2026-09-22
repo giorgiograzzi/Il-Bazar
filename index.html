@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+<title>Il Bazar</title>
+<meta name="description" content="Il Bazar — quaderno per scrivere poesie e testi rap, con rimario italiano offline. Nessun account, tutto resta sul telefono." />
+<meta name="theme-color" content="#111113" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+<link rel="icon" href="icons/favicon.png" type="image/png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Il Bazar" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div id="app">
+
+  <!-- Schermata: lista poesie -->
+  <section id="schermata-lista" class="schermata schermata-attiva">
+    <header class="top-bar">
+      <h1 class="logo">IL BAZAR</h1>
+      <button id="btn-info" class="btn-icona" aria-label="Informazioni">i</button>
+    </header>
+    <div class="contenuto-scroll">
+      <ul id="lista-poesie" class="lista-poesie"></ul>
+      <p id="lista-vuota" class="stato-vuoto" hidden>Ancora nessuna poesia qui dentro.<br />Tocca "Nuova poesia" per iniziare.</p>
+    </div>
+    <button id="btn-nuova-poesia" class="fab">+ Nuova poesia</button>
+  </section>
+
+  <!-- Schermata: editor -->
+  <section id="schermata-editor" class="schermata">
+    <header class="top-bar top-bar-editor">
+      <button id="btn-indietro" class="btn-icona" aria-label="Torna alla lista">‹</button>
+      <input id="input-titolo" class="input-titolo" maxlength="80" autocomplete="off" autocorrect="off" spellcheck="false" />
+      <button id="btn-esporta" class="btn-icona btn-icona-accento" aria-label="Esporta">⇧</button>
+    </header>
+    <div id="editor-container" class="editor-container"></div>
+    <div class="toolbar-editor">
+      <button id="btn-rimario" class="btn-toolbar">
+        <span class="btn-toolbar-icona">✎</span>Rimario
+      </button>
+      <button id="btn-tasca" class="btn-toolbar">
+        <span class="btn-toolbar-icona">◆</span>Tasca
+      </button>
+      <label class="switch-sinalefe" for="chk-sinalefe">
+        <input type="checkbox" id="chk-sinalefe" />
+        <span class="switch-visuale"></span>
+        <span class="switch-testo">Sinalefe</span>
+      </label>
+    </div>
+  </section>
+
+  <!-- Overlay scuro dietro ai pannelli -->
+  <div id="overlay-pannelli" class="overlay-pannelli" hidden></div>
+
+  <!-- Pannello: rimario -->
+  <div id="pannello-rimario" class="pannello" hidden>
+    <div class="pannello-maniglia" data-chiudi="rimario"></div>
+    <div class="pannello-intestazione">
+      <h2>Rimario</h2>
+      <button class="btn-chiudi-pannello" data-chiudi="rimario" aria-label="Chiudi">✕</button>
+    </div>
+    <input id="ricerca-rima" class="input-ricerca" placeholder="Cerca una rima a mano..." autocomplete="off" autocorrect="off" spellcheck="false" />
+    <p id="rima-parola-corrente" class="rima-parola-corrente" hidden></p>
+    <div class="rimario-tab" role="tablist">
+      <button class="tab-btn tab-attiva" data-tab="perfette" role="tab">Rima perfetta</button>
+      <button class="tab-btn" data-tab="assonanti" role="tab">Assonanza</button>
+    </div>
+    <div class="rimario-risultati">
+      <ul id="lista-rime-perfette" class="lista-chip"></ul>
+      <ul id="lista-rime-assonanti" class="lista-chip" hidden></ul>
+      <p id="rime-vuote" class="stato-vuoto" hidden>Nessuna rima trovata. Prova un'altra parola.</p>
+      <p id="rime-caricamento" class="stato-vuoto" hidden>Sto caricando il rimario...</p>
+    </div>
+  </div>
+
+  <!-- Pannello: tasca -->
+  <div id="pannello-tasca" class="pannello" hidden>
+    <div class="pannello-maniglia" data-chiudi="tasca"></div>
+    <div class="pannello-intestazione">
+      <h2>Tasca</h2>
+      <button class="btn-chiudi-pannello" data-chiudi="tasca" aria-label="Chiudi">✕</button>
+    </div>
+    <div class="contenuto-scroll">
+      <div class="spunto-giorno">
+        <span class="spunto-etichetta">Spunto del giorno</span>
+        <p id="testo-spunto"></p>
+      </div>
+      <form id="form-nuova-nota" class="form-nuova-nota">
+        <input id="input-nuova-nota" class="input-ricerca" placeholder="Aggiungi un appunto o una frase..." autocomplete="off" autocorrect="off" spellcheck="false" />
+        <button type="submit" class="btn-icona-accento" aria-label="Aggiungi">+</button>
+      </form>
+      <ul id="lista-note-tasca" class="lista-note"></ul>
+      <p id="tasca-vuota" class="stato-vuoto" hidden>La tasca è vuota. Aggiungi la tua prima frase.</p>
+    </div>
+  </div>
+
+  <!-- Pannello: informazioni -->
+  <div id="pannello-info" class="pannello" hidden>
+    <div class="pannello-maniglia" data-chiudi="info"></div>
+    <div class="pannello-intestazione">
+      <h2>Informazioni</h2>
+      <button class="btn-chiudi-pannello" data-chiudi="info" aria-label="Chiudi">✕</button>
+    </div>
+    <div class="contenuto-scroll info-contenuto">
+      <p><strong>Il Bazar</strong> è un quaderno per scrivere poesie e testi rap. Funziona offline e salva tutto solo su questo telefono: nessun account, nessun server, nessun dato che esce da qui.</p>
+      <p>Il rimario include 60.378 parole italiane dalla raccolta <strong>paroleitaliane</strong> di Francesco Napoletano (progetto <em>napolux/paroleitaliane</em> su GitHub), distribuita con licenza MIT.</p>
+      <p>Sillabazione e rime sono calcolate con un'euristica linguistica: nella maggior parte dei casi funzionano bene, ma l'italiano ha eccezioni che nessun algoritmo semplice coglie del tutto — usa l'orecchio, non solo il numero.</p>
+    </div>
+  </div>
+
+  <!-- Menu azioni generico (esporta / poesia / nota) -->
+  <div id="menu-azioni" class="overlay" hidden>
+    <div class="foglio-menu" id="corpo-menu-azioni"></div>
+  </div>
+
+  <!-- Dialogo di conferma generico -->
+  <div id="overlay-conferma" class="overlay" hidden>
+    <div class="dialogo">
+      <p id="testo-conferma"></p>
+      <div class="dialogo-azioni">
+        <button id="btn-conferma-annulla" class="btn-secondario">Annulla</button>
+        <button id="btn-conferma-ok" class="btn-pericolo">Elimina</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dialogo di input testuale generico (rinomina / titolo) -->
+  <div id="overlay-prompt" class="overlay" hidden>
+    <div class="dialogo">
+      <p id="titolo-prompt"></p>
+      <input id="input-prompt" class="input-ricerca" autocomplete="off" autocorrect="off" spellcheck="false" />
+      <div class="dialogo-azioni">
+        <button id="btn-prompt-annulla" class="btn-secondario">Annulla</button>
+        <button id="btn-prompt-ok" class="btn-primario">Salva</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="toast" class="toast" hidden></div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
